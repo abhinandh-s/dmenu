@@ -1,0 +1,30 @@
+name: Build dmenu
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Install build dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y libx11-dev libxft-dev libxinerama-dev build-essential
+
+      - name: Build dmenu
+        run: make
+
+      - name: Check executable
+        run: |
+          if [ ! -f dmenu ]; then
+            echo "Build failed: dmenu not found"
+            exit 1
+          fi
